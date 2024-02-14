@@ -1,0 +1,18 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags, title, CSS imports, etc. here -->
+</head>
+<body>
+    <nav>
+        <!-- Your navigation bar here -->
+        <a href="{% url 'index' %}">index</a> |
+        <a href="{% url 'register' %}">Register</a> |
+        <a href="{% url 'registered_players' %}">Registered Players</a>
+    </nav>
+
+    {% block content %}
+    {% endblock content %}
+</body>
+</html>
