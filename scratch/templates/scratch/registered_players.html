@@ -1,5 +1,12 @@
+{% extends 'scratch/base.html' %}
+{% block content %}
 {% load static %}
 <link href="{% static 'scratch/style.css' %}" rel="stylesheet">
+<form method="GET">
+    {{ form.as_p }}
+    <input type="submit" value="Search">
+</form>
+
 <table>
     <thead>
         <tr>
@@ -22,3 +29,4 @@
         {% endfor %}
     </tbody>
 </table>
+{% endblock content %}
