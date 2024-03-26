@@ -1,0 +1,17 @@
+{% extends 'scratch/base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register Tournament</title>
+</head>
+<body>
+    <h2>Register Tournament</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register Tournament</button>
+    </form>
+</body>
+</html>
+{% endblock content %}

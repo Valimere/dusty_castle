@@ -14,5 +14,23 @@ class Team(models.Model):
 
 
 class Tournament(models.Model):
+    NOT_STARTED = 'Not started'
+    STARTED = 'Started'
+    COMPLETED = 'Completed'
+
+    TOURNAMENT_STATUS_CHOICES = [
+        (NOT_STARTED, 'Not started'),
+        (STARTED, 'Started'),
+        (COMPLETED, 'Completed')
+    ]
+
     name = models.CharField(unique=True, max_length=200)
     date = models.DateField()
+    status = models.CharField(max_length=12, choices=TOURNAMENT_STATUS_CHOICES, default=NOT_STARTED)
+
+
+class TournamentRegistration(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+    registration_date = models.DateField()
+

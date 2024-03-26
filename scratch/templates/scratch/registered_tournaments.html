@@ -1,0 +1,32 @@
+{% extends 'scratch/base.html' %}
+{% block content %}
+{% load static %}
+<link href="{% static 'scratch/style.css' %}" rel="stylesheet">
+<form method="GET">
+    {{ form.as_p }}
+    <input type="submit" value="Search">
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>start Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tournament in tournaments %}
+            <tr>
+                <td>{{ tournament.name }}</td>
+                <td>{{ tournament.date }}</td>
+                <td>{{ tournament.status }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">No tournaments have been registered yet.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
