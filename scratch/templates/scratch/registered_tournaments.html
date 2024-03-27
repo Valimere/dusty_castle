@@ -2,10 +2,6 @@
 {% block content %}
 {% load static %}
 <link href="{% static 'scratch/style.css' %}" rel="stylesheet">
-<form method="GET">
-    {{ form.as_p }}
-    <input type="submit" value="Search">
-</form>
 
 <table>
     <thead>
@@ -18,7 +14,9 @@
     <tbody>
         {% for tournament in tournaments %}
             <tr>
-                <td>{{ tournament.name }}</td>
+                <td><a href="{% url 'tournament_detail' tournament.id %}">
+                        {{ tournament.name }}
+                    </a></td>
                 <td>{{ tournament.date }}</td>
                 <td>{{ tournament.status }}</td>
             </tr>

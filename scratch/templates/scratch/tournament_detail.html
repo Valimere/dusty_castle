@@ -1,0 +1,52 @@
+{% extends 'scratch/base.html' %}
+{% block content %}
+    {% load static %}
+    <link href="{% static 'scratch/style.css' %}" rel="stylesheet">
+    <h1>Tournament: {{ tournament.name }}</h1>
+
+    <p>Date: {{ tournament.date }}    Status: {{ tournament.get_status_display }}</p>
+
+    <h2>Register a Player</h2>
+    <form method="post">
+        {% csrf_token %}
+
+        {{ player_registration_form.as_p }}
+        <button type="submit" name="add_player">Add Player</button>
+    </form>
+
+    <h2>Registered Players</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for player in registered_players %}
+            <tr>
+                <td>{{ player.email }}</td>
+                <td>{{ player.first_name }} {{ player.last_name }}</td>
+                <td>
+                    <form action="{% url 'delete_player_from_tournament' tournament.id player.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-btn">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="2"> No Players have been registered yet.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+    <p></p>
+
+    <form action="{% url 'tournament_delete' tournament.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Delete Tournament" onclick="return confirm('Are you sure?');">
+    </form>
+{% endblock content %}

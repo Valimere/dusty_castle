@@ -1,6 +1,7 @@
 from django.db.models import Q
-from django.shortcuts import render, redirect
-from .forms import PlayerRegistrationForm, PlayerSearchForm, TournamentRegistrationForm, TournamentSearchForm
+from django.utils import timezone
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import PlayerRegistrationForm, PlayerSearchForm, TournamentRegistrationForm, TournamentSearchForm, TournamentRegistration
 from .models import Player, Tournament
 
 
@@ -62,6 +63,50 @@ def registered_tournaments_view(request):
     return render(request,
                   template_name='scratch/registered_tournaments.html',
                   context={'tournaments': tournaments, 'search_form': search_form})
+
+
+def tournament_view(request, tournament_id):
+    tournament = Tournament.objects.get(id=tournament_id)
+    player_registration_form = TournamentRegistrationForm(
+        request.POST or None,
+        tournament_id=tournament_id  # Passing tournament_id to the form
+    )
+    if request.method == 'POST' and player_registration_form.is_valid():
+        player = player_registration_form.cleaned_data['player']
+
+        # Create a TournamentRegistration instance instead of using .add()
+        TournamentRegistration.objects.create(
+            player=player,
+            tournament=tournament,
+            registration_date=timezone.now().date()  # Set the registration date
+        )
+        return redirect('tournament_detail', tournament_id=tournament.id)
+
+    context = {
+        'tournament': tournament,
+        'player_registration_form': player_registration_form,
+        'registered_players': tournament.registered_players.all(),
+    }
+    return render(request, 'scratch/tournament_detail.html', context)
+
+
+def tournament_delete_view(request, tournament_id):
+    tournament = get_object_or_404(Tournament, id=tournament_id)
+
+    if request.method == 'POST':
+        tournament.delete()
+        return redirect('registered_tournaments')
+
+    return redirect('tournament_detail', tournament_id=tournament.id)
+
+
+def delete_player_from_tournament(request, tournament_id, player_id):
+    if request.method == 'POST':
+        tournament = get_object_or_404(Tournament, id=tournament_id)
+        player = get_object_or_404(Player, id=player_id)
+        tournament.registered_players.remove(player)
+        return redirect('tournament_detail', tournament_id=tournament.id)
+    # Redirect or show an error if not POST request
 
 
 def IndexView(request):
