@@ -18,7 +18,9 @@
     <tbody>
         {% for player in players %}
             <tr>
-                <td>{{ player.email }}</td>
+                <td>
+                    <a href="{% url 'player_detail' player.id %}">{{ player.email }}</a>
+                </td>
                 <td>{{ player.first_name }}</td>
                 <td>{{ player.last_name }}</td>
             </tr>

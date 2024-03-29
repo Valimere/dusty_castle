@@ -1,0 +1,19 @@
+{% extends 'scratch/base.html' %}
+{% block content %}
+    {% load static %}
+    <link href="{% static 'scratch/style.css' %}" rel="stylesheet">
+    <h2>Player Details: {{ player.first_name }} {{ player.last_name }}</h2>
+    <p>Email: {{ player.email }}</p>
+    <p>Registered Tournaments:</p>
+    <ul>
+        {% for registration in registrations %}
+            <li>
+                <a href="{% url 'tournament_detail' registration.tournament.id %}">
+                    {{ registration.tournament.name }} (Registered on: {{ registration.registration_date }})
+                </a>
+            </li>
+        {% empty %}
+            <li>This player has not registered for any tournaments.</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

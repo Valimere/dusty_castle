@@ -1,5 +1,6 @@
 from django import forms
-from .models import Player, TournamentRegistration
+from .models import Player, TournamentRegistration, Tournament
+from datetime import date
 
 
 class PlayerRegistrationForm(forms.ModelForm):
@@ -29,3 +30,14 @@ class TournamentRegistrationForm(forms.Form):
 
 class TournamentSearchForm(forms.Form):
     search = forms.CharField(max_length=100, required=False)
+
+
+class TournamentCreationForm(forms.ModelForm):
+    date = forms.DateField(
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        initial=date.today
+    )
+
+    class Meta:
+        model = Tournament
+        fields = ['name', 'date']

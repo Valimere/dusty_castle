@@ -1,8 +1,9 @@
 from django.db.models import Q
 from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import PlayerRegistrationForm, PlayerSearchForm, TournamentRegistrationForm, TournamentSearchForm, TournamentRegistration
-from .models import Player, Tournament
+from datetime import date
+from .forms import PlayerRegistrationForm, PlayerSearchForm, TournamentRegistrationForm, TournamentSearchForm, TournamentCreationForm
+from .models import Player, Tournament, TournamentRegistration
 
 
 def register_player_view(request):
@@ -107,6 +108,39 @@ def delete_player_from_tournament(request, tournament_id, player_id):
         tournament.registered_players.remove(player)
         return redirect('tournament_detail', tournament_id=tournament.id)
     # Redirect or show an error if not POST request
+
+
+def player_detail_view(request, player_id):
+    player = get_object_or_404(Player, id=player_id)
+    registrations = TournamentRegistration.objects.filter(player=player)
+
+    context = {
+        'player': player,
+        'registrations': registrations,
+    }
+    return render(request, 'scratch/player_detail.html', context)
+
+def create_tournament_view(request):
+    if request.method == 'POST':
+        form = TournamentCreationForm(request.POST)
+        if form.is_valid():
+            tournament = form.save(commit=False)
+            selected_players = request.POST.getlist('players')
+            tournament.save()
+
+            for player_id in selected_players:
+                TournamentRegistration.objects.create(
+                    player_id=int(player_id),
+                    tournament=tournament,
+                    registration_date=date.today()  # Or any other appropriate date
+                )
+
+            return redirect('tournament_detail', tournament_id=tournament.id)
+    else:
+        form = TournamentCreationForm()
+
+    players = Player.objects.all()
+    return render(request, 'scratch/create_tournament.html', {'form': form, 'players': players})
 
 
 def IndexView(request):

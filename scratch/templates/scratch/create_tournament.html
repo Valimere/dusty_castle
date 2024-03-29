@@ -1,0 +1,33 @@
+{% extends 'scratch/base.html' %}
+{% block content %}
+    {% load static %}
+    <link href="{% static 'scratch/style.css' %}" rel="stylesheet">
+    <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Email</th>
+                <th>Player Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+            <tr>
+                <td>
+                    <input type="checkbox" id="player_{{ player.id }}" name="players" value="{{ player.id }}">
+                    <label for="player_{{ player.id }}"></label>
+                </td>
+                <td>{{ player.email }}</td>
+                <td>{{ player.first_name }} {{ player.last_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <input type="submit" value="Create Tournament">
+</form>
+{% endblock content %}
