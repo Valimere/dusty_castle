@@ -26,7 +26,9 @@
         <tbody>
         {% for player in registered_players %}
             <tr>
-                <td>{{ player.email }}</td>
+                <td>
+                    <a href="{% url 'player_detail' player.id %}">{{ player.email }}</a>
+                </td>
                 <td>{{ player.first_name }} {{ player.last_name }}</td>
                 <td>
                     <form action="{% url 'delete_player_from_tournament' tournament.id player.id %}" method="post">

@@ -1,16 +1,17 @@
-<!-- templates/base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Meta tags, title, CSS imports, etc. here -->
+    {% load static %}
+    <link href="{% static 'scratch/style.css' %}" rel="stylesheet">
 </head>
 <body>
     <nav>
         <!-- Your navigation bar here -->
-        <a href="{% url 'registered_players' %}">Registered Players</a> |
-        <a href="{% url 'registered_tournaments' %}">Registered Tournaments</a> |
-        <a href="{% url 'create_tournament' %}">Create Tournament</a> |
-        <a href="{% url 'player_registration' %}">Player Registration</a>
+        <a href="{% url 'registered_players' %}" class="{% if request.resolver_match.url_name == 'registered_players' %}active-tab{% endif %}">Registered Players</a> |
+        <a href="{% url 'registered_tournaments' %}" class="{% if request.resolver_match.url_name == 'registered_tournaments' %}active-tab{% endif %}">Registered Tournaments</a> |
+        <a href="{% url 'create_tournament' %}" class="{% if request.resolver_match.url_name == 'create_tournament' %}active-tab{% endif %}">Create Tournament</a> |
+        <a href="{% url 'player_registration' %}" class="{% if request.resolver_match.url_name == 'player_registration' %}active-tab{% endif %}">Player Registration</a>
     </nav>
 
     {% block content %}

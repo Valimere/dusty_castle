@@ -3,31 +3,44 @@
     {% load static %}
     <link href="{% static 'scratch/style.css' %}" rel="stylesheet">
     <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
+        {% csrf_token %}
+        {{ form.as_p }}
 
-    <table>
-        <thead>
-            <tr>
-                <th>Select</th>
-                <th>Email</th>
-                <th>Player Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for player in players %}
-            <tr>
-                <td>
-                    <input type="checkbox" id="player_{{ player.id }}" name="players" value="{{ player.id }}">
-                    <label for="player_{{ player.id }}"></label>
-                </td>
-                <td>{{ player.email }}</td>
-                <td>{{ player.first_name }} {{ player.last_name }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h3>Select Players for the Tournament</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" id="select-all">
+                        <label for="select-all">Select All</label>
+                    </th>
+                    <th>Email</th>
+                    <th>Player Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for player in players %}
+                <tr>
+                    <td>
+                        <input type="checkbox" class="player-checkbox" id="player_{{ player.id }}" name="players" value="{{ player.id }}">
+                        <label for="player_{{ player.id }}"></label>
+                    </td>
+                    <td>{{ player.email }}</td>
+                    <td>{{ player.first_name }} {{ player.last_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p></p>
+        <input type="submit" value="Create Tournament">
+    </form>
 
-    <input type="submit" value="Create Tournament">
-</form>
+    <script>
+        document.getElementById('select-all').addEventListener('click', function(event) {
+            var checkboxes = document.querySelectorAll('.player-checkbox');
+            for (var checkbox of checkboxes) {
+                checkbox.checked = event.target.checked;
+            }
+        });
+    </script>
 {% endblock content %}

@@ -29,3 +29,10 @@ tr:nth-child(even) {
     cursor: pointer;
     color: red;
 }
+.active-tab {
+    font-weight: bold;
+    color: #000000; /* Red text */
+    margin-bottom: -2px; /* Shift upwards to align with inactive tabs */
+    /* Additional styling as needed */
+}
+
